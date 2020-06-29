@@ -44,10 +44,15 @@ server <- function(input, output) {
                to = input$dates[2],
                auto.assign = FALSE)
   })
+  
+  finalInput <- reactive({
+    if(!input$adjust) dataInput() # Using ifelse() doesn't work for some reason.
+    else adjust(dataInput())
+  })
 
   output$plot <- renderPlot({
 
-    chartSeries(dataInput(), theme = chartTheme("white"),
+    chartSeries(finalInput(), theme = chartTheme("white"),
                 type = "line", log.scale = input$log, TA = NULL)
   })
 
